@@ -32,22 +32,26 @@ export default class APIHelper extends RestClient{
 
     getAllArtists () {
         return this.GET('/artists/')
-                   .then(response => response.json());
+                   .then(response => response.json())
+                   .catch(error => console.log("Error happened: " + error.message));
     }
 
     createArtist (nickname, age) {
         return this.POST('/artists/', {nickname, age})
-                   .then(response => response.json());
+                   .then(response => response.json())
+                   .catch(error => console.log("Error happened: " + error.message));
     }
 
     login (email, password) {
         return this.POST('/users/authenticate', {email, password})
-                   .then(response => response.json());
+                   .then(response => response.json())
+                   .catch(error => console.log("Error happened: " + error.message));
     }
 
     register (username, email, password) {
         return this.POST('/users/register', {username, email, password})
-                   .then(response => response.json());
+                   .then(response => response.json())
+                   .catch(error => console.log("Error happened: " + error.message));
     }
 
 }

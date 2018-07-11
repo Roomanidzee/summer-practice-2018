@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from "react-native";
-import {ListItem, Button} from 'react-native-elements';
+import {List, ListItem, Button} from 'react-native-elements';
 import {ArtistStack} from "../navigation/AppNavigator";
 import APIHelper from "../components/APIHelper";
 
@@ -28,9 +28,7 @@ export default class ArtistsListScreen extends React.Component{
                    .then(responseJSON => {
                        this.setState({artists: responseJSON.data.artists});
                    })
-                   .catch((error) => {
-                       console.error(error);
-                   });
+                   .catch(error => Alert.alert("Error", error.message));;
 
 
      }
@@ -44,6 +42,9 @@ export default class ArtistsListScreen extends React.Component{
                  <Button
 
                     title= 'Go to Artist creation page'
+                    raised
+                    buttonStyle={stylesVariable.next_button}
+                    backgroundColor={'blue'}
                     onPress = {() => this.props.navigation.navigate('AddArtist', {
 
                         token: props.navigation.params.token
@@ -52,19 +53,23 @@ export default class ArtistsListScreen extends React.Component{
 
                  />
 
-                 {
-                     this.state.artists.map((item, i) => (
+                 <List containerStyle = {stylesVariable.list_style}>
 
-                         <ListItem
+                     {
+                         this.state.artists.map((item, i) => (
 
-                             key={i}
-                             title={item.nickname}
-                             subtitle={item.age + ' years old'}
+                             <ListItem
 
-                         />
+                                 key={i}
+                                 title={item.nickname}
+                                 subtitle={item.age + ' years old'}
 
-                     ))
-                 }
+                             />
+
+                         ))
+                     }
+
+                 </List>
 
                  <ArtistStack/>
 
@@ -81,6 +86,15 @@ const stylesVariable = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center'
+    },
+
+    next_button: {
+        marginTop: 10,
+        height: 100
+    },
+
+    list_style: {
+        marginBottom: 20
     }
 
 });

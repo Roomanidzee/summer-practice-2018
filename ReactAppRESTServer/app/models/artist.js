@@ -6,8 +6,7 @@ const ArtistSchema = new Schema({
    nickname: {
 
        type: String,
-       trim: true,
-       required: true
+       trim: true
 
    },
 

@@ -82,13 +82,9 @@ export default class RegisterScreen extends React.Component {
                             color='white'
                         />
                     }
-
-                    buttonStyle={
-                        {
-                            backgroundColor: "blue"
-                        }
-                    }
-
+                    raised
+                    buttonStyle={stylesVariable.next_button}
+                    backgroundColor={'blue'}
                     onPress = {this.handleRegister.bind(this)}
 
                 />
@@ -111,7 +107,8 @@ export default class RegisterScreen extends React.Component {
                      this.props.navigation.navigate('Registration');
                  }
 
-           });
+           })
+           .catch(error => Alert.alert("Error", error.message));
 
     }
 
@@ -121,7 +118,13 @@ const stylesVariable = StyleSheet.create({
 
     container: {
         flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
         alignItems: 'center'
+    },
+    next_button: {
+        marginTop: 40,
+        height: 100
     }
 
 });

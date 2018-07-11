@@ -77,12 +77,9 @@ export default class ArtistCreateScreen extends React.Component{
                             color='white'
                         />
                     }
-
-                    buttonStyle={
-                        {
-                            backgroundColor: "blue"
-                        }
-                    }
+                    raised
+                    buttonStyle={stylesVariable.next_button}
+                    backgroundColor={'blue'}
                     onPress = {this.handleArtistCreate.bind(this)}
 
                 />
@@ -110,7 +107,8 @@ export default class ArtistCreateScreen extends React.Component{
                     this.props.navigation.navigate('AddArtist');
                 }
 
-           });
+           })
+           .catch(error => Alert.alert("Error", error.message));
 
     }
 
@@ -120,7 +118,14 @@ const stylesVariable = StyleSheet.create({
 
     container: {
         flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
         alignItems: 'center'
+    },
+
+    next_button: {
+        marginTop: 10,
+        height: 100
     }
 
 });

@@ -1,7 +1,7 @@
 const userModel = require('../models/user');
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
-const saltRounds = 10;
+const saltRounds = bcrypt.genSaltSync(10);
 
 exports.saveUser = function(req, resp, next){
 

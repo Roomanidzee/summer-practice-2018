@@ -87,13 +87,9 @@ export default class WelcomeScreen extends React.Component {
                             color='white'
                         />
                     }
-
-                    buttonStyle = {
-                        {
-                            backgroundColor: "blue"
-                        }
-                    }
-
+                    raised
+                    buttonStyle={stylesVariable.next_button}
+                    backgroundColor={'blue'}
                     onPress = {
                         () => this.props.navigation.navigate('Registration')
                     }
@@ -111,7 +107,8 @@ export default class WelcomeScreen extends React.Component {
         const api = new APIHelper('');
 
         api.login(this.state.email, this.state.password)
-           .then(responseJSON => this.props.navigation.navigate('ShowArtists', {token: responseJSON.data.token}));
+           .then(responseJSON => this.props.navigation.navigate('ShowArtists', {token: responseJSON.data.token}))
+           .catch(error => Alert.alert("Error", error.message));
 
     }
 
@@ -123,10 +120,13 @@ const stylesVariable = StyleSheet.create({
 
     container: {
         flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
         alignItems: 'center'
     },
     next_button: {
-
+        marginTop: 40,
+        height: 100
     }
 
 });
