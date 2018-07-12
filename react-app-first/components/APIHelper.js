@@ -6,7 +6,7 @@ export default class APIHelper extends RestClient{
 
         if(!(authToken === '')){
 
-            super('http://localhost:8081', {
+            super('http://10.0.3.2:8081', {
 
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -18,7 +18,7 @@ export default class APIHelper extends RestClient{
 
         }else{
 
-            super('http://localhost:8081', {
+            super('http://10.0.3.2:8081', {
 
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
