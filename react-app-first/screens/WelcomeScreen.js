@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet} from "react-native";
+import {View, StyleSheet, Alert} from "react-native";
 import {FormInput, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import APIHelper from "../components/APIHelper";
@@ -67,11 +67,8 @@ export default class WelcomeScreen extends React.Component {
                         />
                     }
 
-                    buttonStyle = {
-                        {
-                            backgroundColor: "blue"
-                        }
-                    }
+                    buttonStyle={stylesVariable.button_style}
+                    backgroundColor={'blue'}
 
                     onPress = {this.handleLogin.bind(this)}
 
@@ -88,7 +85,7 @@ export default class WelcomeScreen extends React.Component {
                         />
                     }
                     raised
-                    buttonStyle={stylesVariable.next_button}
+                    buttonStyle={stylesVariable.button_style}
                     backgroundColor={'blue'}
                     onPress = {
                         () => this.props.navigation.navigate('Registration')
@@ -104,10 +101,18 @@ export default class WelcomeScreen extends React.Component {
 
     handleLogin = () => {
 
-        const api = new APIHelper('');
+        const api = new APIHelper(this.props, '');
 
         api.login(this.state.email, this.state.password)
-           .then(responseJSON => this.props.navigation.navigate('ShowArtists', {token: responseJSON.data.token}))
+           .then(responseJSON => {
+
+               if(!(responseJSON.data.token === '')){
+
+                   this.props.navigation.navigate('ShowArtists', {token: responseJSON.data.token})
+
+               }
+
+           })
            .catch(error => Alert.alert("Error", error.message));
 
     }
@@ -124,9 +129,10 @@ const stylesVariable = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    next_button: {
-        marginTop: 40,
-        height: 100
+    button_style: {
+        width: 200,
+        margin: 15,
+        marginTop:40
     }
 
 });

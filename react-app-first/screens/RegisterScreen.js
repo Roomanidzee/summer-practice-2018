@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet} from "react-native";
+import {View, StyleSheet, Alert} from "react-native";
 import {FormInput, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import APIHelper from "../components/APIHelper";
@@ -83,7 +83,7 @@ export default class RegisterScreen extends React.Component {
                         />
                     }
                     raised
-                    buttonStyle={stylesVariable.next_button}
+                    buttonStyle={stylesVariable.button_style}
                     backgroundColor={'blue'}
                     onPress = {this.handleRegister.bind(this)}
 
@@ -97,7 +97,7 @@ export default class RegisterScreen extends React.Component {
 
     handleRegister = () => {
 
-        const api = new APIHelper('');
+        const api = new APIHelper(this.props, '');
         api.register(this.state.username, this.state.email, this.state.password)
            .then(responseJSON => {
 
@@ -122,9 +122,10 @@ const stylesVariable = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    next_button: {
-        marginTop: 40,
-        height: 100
+    button_style: {
+        width: 200,
+        margin: 15,
+        marginTop:40
     }
 
 });

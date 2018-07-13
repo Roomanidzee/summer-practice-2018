@@ -1,7 +1,6 @@
 const userModel = require('../models/user');
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
-const saltRounds = bcrypt.genSaltSync(10);
 
 exports.saveUser = function(req, resp, next){
 
@@ -31,9 +30,7 @@ exports.saveUser = function(req, resp, next){
 
 exports.authenticate = function(req, resp, next){
 
-   const hashedPass = bcrypt.hashSync(req.body.password, saltRounds);
-
-   userModel.findOne({email: req.body.email, password: hashedPass}, function (err, userInfo) {
+   userModel.findOne({email: req.body.email}, function (err, userInfo) {
 
        if(err){
            next(err);
@@ -41,7 +38,7 @@ exports.authenticate = function(req, resp, next){
 
            if(bcrypt.compareSync(req.body.password, userInfo.password)){
 
-               const token = jwt.sign({id: userInfo._id}, req.app.get('secret_key'), {expiresIn: '1h'});
+               const token = jwt.sign({id: userInfo._id}, 'gdfgafdgafgadfgsdfgsdfgsrg', {expiresIn: '1h'});
 
                resp.json({
                    status: "success",

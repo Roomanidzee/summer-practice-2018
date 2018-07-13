@@ -1,83 +1,101 @@
 import React from 'react';
-import {View, StyleSheet} from "react-native";
-import {List, ListItem, Button} from 'react-native-elements';
-import {ArtistStack} from "../navigation/AppNavigator";
+import {View, StyleSheet, Alert, ListView} from "react-native";
+import {List, ListItem, Button, Text} from 'react-native-elements';
 import APIHelper from "../components/APIHelper";
 
-export default class ArtistsListScreen extends React.Component{
+export default class ArtistsListScreen extends React.Component {
 
     static navigationOptions = {
         title: 'Here are all artists'
     };
 
-     constructor(props){
-         super(props);
+    constructor(props) {
+        super(props);
 
-         this.state = {
-             artists: []
-         }
-     }
+        const {navigation} = this.props;
+        const apiToken = navigation.getParam('token', '');
+        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-     componentDidMount(){
+        this.state = {
+            token: apiToken,
+            datasource: ds.cloneWithRows([{nickname: 'example', age: '18'}])
+        }
+    }
 
-         const {stateProps} = props.navigation;
-         const token = stateProps.params.token;
-         const api = new APIHelper(token);
+    renderRow(rowData, sectionID) {
+        return (
+            <ListItem
+                key={sectionID}
+                title={rowData.nickname}
+                subtitle={rowData.age + ' years old'}
+            />
+        );
+    };
 
-         return api.getAllArtists()
-                   .then(responseJSON => {
-                       this.setState({artists: responseJSON.data.artists});
-                   })
-                   .catch(error => Alert.alert("Error", error.message));;
+    render() {
 
+        return (
 
-     }
+            <View style={stylesVariable.container}>
 
-     render(){
-
-         return (
-
-             <View style={stylesVariable.container}>
-
-                 <Button
-
-                    title= 'Go to Artist creation page'
+                <Button
+                    title = 'Show Artists'
                     raised
-                    buttonStyle={stylesVariable.next_button}
+                    buttonStyle={stylesVariable.button_style}
                     backgroundColor={'blue'}
-                    onPress = {() => this.props.navigation.navigate('AddArtist', {
+                    onPress={this.handleList.bind(this)}
 
-                        token: props.navigation.params.token
+                >
+                    <Text>Show Artists</Text>
+                </Button>
 
-                    })}
+                <Button
+                    title = 'Go to creation page'
+                    raised
+                    buttonStyle={stylesVariable.button_style}
+                    backgroundColor={'blue'}
+                    onPress={
+                        () => this.props.navigation.push('AddArtist', {
 
-                 />
+                            token: this.state.token
 
-                 <List containerStyle = {stylesVariable.list_style}>
+                        }
+                     )
+                    }
 
-                     {
-                         this.state.artists.map((item, i) => (
+                >
+                    <Text>Go to creation page</Text>
+                </Button>
 
-                             <ListItem
 
-                                 key={i}
-                                 title={item.nickname}
-                                 subtitle={item.age + ' years old'}
+                <List containerStyle={stylesVariable.list_style}>
 
-                             />
+                    <ListView
+                        renderRow={this.renderRow.bind(this)}
+                        dataSource={this.state.datasource}
+                    />
 
-                         ))
-                     }
+                </List>
 
-                 </List>
+            </View>
 
-                 <ArtistStack/>
+        );
 
-             </View>
 
-         );
+    }
 
-     }
+    handleList = () => {
+
+        const api = new APIHelper(this.props, this.state.token);
+
+        api.getAllArtists()
+            .then(responseJSON => this.setState({datasource: responseJSON.data.artists}))
+            .catch(error => {
+                Alert.alert("Error", error.message);
+                throw new Error(error);
+            });
+
+    };
 
 }
 
@@ -88,9 +106,10 @@ const stylesVariable = StyleSheet.create({
         alignItems: 'center'
     },
 
-    next_button: {
-        marginTop: 10,
-        height: 100
+    button_style: {
+        width: 200,
+        margin: 15,
+        marginTop: 40
     },
 
     list_style: {

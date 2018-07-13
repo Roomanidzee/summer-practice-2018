@@ -7,8 +7,6 @@ const usersRoutes = require('../routes/users');
 const artistsRoutes = require('../routes/artists');
 const utils = require('../utils/validation');
 
-app.set('secretKey', 'very_secret_key');
-
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({
     extended: false

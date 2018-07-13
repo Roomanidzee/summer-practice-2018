@@ -1,8 +1,7 @@
 import React from 'react';
-import {View, StyleSheet} from "react-native";
+import {View, StyleSheet, Alert} from "react-native";
 import {FormInput, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome'
-import {ArtistStack} from "../navigation/AppNavigator";
 import APIHelper from "../components/APIHelper";
 
 export default class ArtistCreateScreen extends React.Component{
@@ -17,7 +16,7 @@ export default class ArtistCreateScreen extends React.Component{
 
         this.state = {
             nickname: '',
-            age: 0
+            age: ''
         }
 
     }
@@ -33,9 +32,12 @@ export default class ArtistCreateScreen extends React.Component{
                     title= 'Go to page with all artists'
                     onPress = {() => this.props.navigation.navigate('ShowArtists', {
 
-                        token: props.navigation.params.token
+                        token: this.props.navigation.params.token
 
                     })}
+                    raised
+                    buttonStyle={stylesVariable.button_style}
+                    backgroundColor={'blue'}
 
                 />
 
@@ -84,8 +86,6 @@ export default class ArtistCreateScreen extends React.Component{
 
                 />
 
-                <ArtistStack/>
-
             </View>
 
         );
@@ -96,7 +96,7 @@ export default class ArtistCreateScreen extends React.Component{
 
         const {stateProps} = props.navigation;
         const token = stateProps.params.token;
-        const api = new APIHelper(token);
+        const api = new APIHelper(this.props, token);
 
         api.createArtist(this.state.nickname, this.state.age)
            .then(responseJSON => {
@@ -123,9 +123,10 @@ const stylesVariable = StyleSheet.create({
         alignItems: 'center'
     },
 
-    next_button: {
-        marginTop: 10,
-        height: 100
+    button_style: {
+        width: 200,
+        margin: 15,
+        marginTop:40
     }
 
 });

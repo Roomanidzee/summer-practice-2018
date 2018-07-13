@@ -1,57 +1,137 @@
-import RestClient from 'react-native-rest-client';
+import React from "react";
 
-export default class APIHelper extends RestClient{
+export default class APIHelper extends React.Component{
 
-    constructor (authToken){
+    constructor(props, authToken){
 
-        if(!(authToken === '')){
+        super(props);
 
-            super('http://10.0.3.2:8081', {
+        this.state = {
+            apiURL: 'http://29c396a1.ngrok.io'
+        };
 
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept': 'application/json',
-                    'x-access-token': authToken
-                }
-
-            });
-
+        if (!(authToken === '')) {
+            this.token = authToken;
         }else{
-
-            super('http://10.0.3.2:8081', {
-
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept': 'application/json'
-                }
-
-            });
-
+            this.token = '';
         }
     }
 
     getAllArtists () {
-        return this.GET('/artists/')
-                   .then(response => response.json())
-                   .catch(error => console.log("Error happened: " + error.message));
+
+        return fetch(this.state.apiURL + '/artists/', {
+
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                'x-access-token': this.token
+            }
+
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .catch(error => {
+            console.log("error occurred: " + error.message);
+            throw error;
+        });
     }
 
     createArtist (nickname, age) {
-        return this.POST('/artists/', {nickname, age})
-                   .then(response => response.json())
-                   .catch(error => console.log("Error happened: " + error.message));
+
+        let details = {
+
+            'nickname': nickname,
+            'age': age
+
+        };
+        let formBody = APIHelper.getFormBody(details);
+
+        return fetch(this.state.apiURL + '/artists/', {
+
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'x-access-token': this.token
+            },
+            body: formBody
+
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .catch(error => {
+            console.log("error occurred: " + error.message);
+            throw error;
+        });
     }
 
     login (email, password) {
-        return this.POST('/users/authenticate', {email, password})
-                   .then(response => response.json())
-                   .catch(error => console.log("Error happened: " + error.message));
+
+        let details = {
+
+           'email': email,
+           'password': password
+
+        };
+        let formBody = APIHelper.getFormBody(details);
+
+        return fetch(this.state.apiURL + '/users/authenticate', {
+
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formBody
+
+        })
+        .then((response) => {
+           return response.json();
+        })
+        .catch(error => {
+           console.log("error occurred: " + error.message);
+           throw error;
+        });
     }
 
     register (username, email, password) {
-        return this.POST('/users/register', {username, email, password})
-                   .then(response => response.json())
-                   .catch(error => console.log("Error happened: " + error.message));
+
+        let details = {
+
+             'username': username,
+             'email': email,
+             'password': password
+
+        };
+        let formBody = APIHelper.getFormBody(details);
+
+        return fetch(this.state.apiURL + '/users/register', {
+
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formBody
+
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .catch(error => {
+            console.log("error occurred: " + error.message);
+            throw error;
+        });
+    }
+
+    static getFormBody(details){
+
+        return Object.keys(details)
+                     .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
+
     }
 
 }
