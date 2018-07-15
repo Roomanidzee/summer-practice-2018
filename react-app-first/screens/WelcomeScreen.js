@@ -1,13 +1,14 @@
 import React from 'react';
 import {View, StyleSheet, Alert} from "react-native";
-import {FormInput, Button} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome'
+import {FormInput, Button, Icon} from 'react-native-elements';
 import APIHelper from "../components/APIHelper";
 
 export default class WelcomeScreen extends React.Component {
 
     static navigationOptions = {
-        title: 'Welcome page'
+        title: 'Главная страница',
+        headerTitleStyle: { alignSelf: 'center' },
+        headerRight: (<View />)
     };
 
     constructor(props) {
@@ -26,16 +27,9 @@ export default class WelcomeScreen extends React.Component {
         return (
 
             <View style={stylesVariable.container}>
-
                 <FormInput
 
-                    placeholder='Email'
-                    leftIcon={
-                        {
-                            type: 'font-awesome',
-                            name: 'envelope'
-                        }
-                    }
+                    placeholder='Электронная почта'
                     onChangeText={(value) => this.setState({email: value})}
                     value = {this.state.email}
 
@@ -43,14 +37,8 @@ export default class WelcomeScreen extends React.Component {
 
                 <FormInput
 
-                    placeholder='Password'
+                    placeholder='Пароль'
                     secureTextEntry={true}
-                    leftIcon={
-                        {
-                            type: 'font-awesome',
-                            name: 'lock'
-                        }
-                    }
                     onChangeText={(value) => this.setState({password: value})}
                     value = {this.state.password}
 
@@ -58,33 +46,28 @@ export default class WelcomeScreen extends React.Component {
 
                 <Button
 
-                    title = 'Sign in'
+                    title = 'Войти'
                     icon={
                         <Icon
                             name='arrow-right'
-                            size={15}
-                            color='white'
+                            size={18}
                         />
                     }
-
                     buttonStyle={stylesVariable.button_style}
                     backgroundColor={'blue'}
-
                     onPress = {this.handleLogin.bind(this)}
 
                 />
 
                 <Button
 
-                    title = 'Sign up'
+                    title = 'Зарегистрироваться'
                     icon={
                         <Icon
                             name='arrow-right'
-                            size={15}
-                            color='white'
+                            size={18}
                         />
                     }
-                    raised
                     buttonStyle={stylesVariable.button_style}
                     backgroundColor={'blue'}
                     onPress = {
@@ -107,9 +90,7 @@ export default class WelcomeScreen extends React.Component {
            .then(responseJSON => {
 
                if(!(responseJSON.data.token === '')){
-
-                   this.props.navigation.navigate('ShowArtists', {token: responseJSON.data.token})
-
+                   this.props.navigation.push('ShowArtists', {token: responseJSON.data.token});
                }
 
            })
@@ -125,14 +106,15 @@ const stylesVariable = StyleSheet.create({
 
     container: {
         flex: 1,
-        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center'
     },
     button_style: {
         width: 200,
-        margin: 15,
-        marginTop:40
+        margin: 15
+    },
+    icon_style: {
+        padding: 10
     }
 
 });

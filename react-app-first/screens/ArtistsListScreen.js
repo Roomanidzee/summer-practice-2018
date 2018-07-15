@@ -1,12 +1,14 @@
 import React from 'react';
-import {View, StyleSheet, Alert, ListView} from "react-native";
+import {View, StyleSheet, Alert} from "react-native";
 import {List, ListItem, Button, Text} from 'react-native-elements';
 import APIHelper from "../components/APIHelper";
 
 export default class ArtistsListScreen extends React.Component {
 
     static navigationOptions = {
-        title: 'Here are all artists'
+        title: 'Список артистов',
+        headerTitleStyle: { alignSelf: 'center' },
+        headerRight: (<View />)
     };
 
     constructor(props) {
@@ -14,23 +16,12 @@ export default class ArtistsListScreen extends React.Component {
 
         const {navigation} = this.props;
         const apiToken = navigation.getParam('token', '');
-        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
         this.state = {
             token: apiToken,
-            datasource: ds.cloneWithRows([{nickname: 'example', age: '18'}])
-        }
+            artistsList: [{nickname: "example", age: 18}]
+        };
     }
-
-    renderRow(rowData, sectionID) {
-        return (
-            <ListItem
-                key={sectionID}
-                title={rowData.nickname}
-                subtitle={rowData.age + ' years old'}
-            />
-        );
-    };
 
     render() {
 
@@ -39,8 +30,7 @@ export default class ArtistsListScreen extends React.Component {
             <View style={stylesVariable.container}>
 
                 <Button
-                    title = 'Show Artists'
-                    raised
+                    title = 'Показать артистов'
                     buttonStyle={stylesVariable.button_style}
                     backgroundColor={'blue'}
                     onPress={this.handleList.bind(this)}
@@ -50,8 +40,7 @@ export default class ArtistsListScreen extends React.Component {
                 </Button>
 
                 <Button
-                    title = 'Go to creation page'
-                    raised
+                    title = 'Добавить'
                     buttonStyle={stylesVariable.button_style}
                     backgroundColor={'blue'}
                     onPress={
@@ -70,10 +59,21 @@ export default class ArtistsListScreen extends React.Component {
 
                 <List containerStyle={stylesVariable.list_style}>
 
-                    <ListView
-                        renderRow={this.renderRow.bind(this)}
-                        dataSource={this.state.datasource}
-                    />
+                    {
+
+                        this.state.artistsList.map((item, i) => (
+
+                            <ListItem
+                                roundAvatar
+                                key = {i}
+                                title = {item.nickname}
+                                subtitle = {`${item.age} лет`}
+                                avatar = {{uri: "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg"}}
+                            />
+
+                        ))
+
+                    }
 
                 </List>
 
@@ -89,7 +89,15 @@ export default class ArtistsListScreen extends React.Component {
         const api = new APIHelper(this.props, this.state.token);
 
         api.getAllArtists()
-            .then(responseJSON => this.setState({datasource: responseJSON.data.artists}))
+            .then(responseJSON => {
+
+                const data = responseJSON.data.artists.map(item => ({
+                    nickname: item.nickname,
+                    age: item.age
+                }));
+
+                this.setState({artistsList: data})
+            })
             .catch(error => {
                 Alert.alert("Error", error.message);
                 throw new Error(error);
@@ -102,18 +110,18 @@ export default class ArtistsListScreen extends React.Component {
 const stylesVariable = StyleSheet.create({
 
     container: {
-        flex: 1,
+        width: '100%',
         alignItems: 'center'
     },
 
     button_style: {
         width: 200,
-        margin: 15,
-        marginTop: 40
+        margin: 15
     },
 
     list_style: {
-        marginBottom: 20
+        marginBottom: 20,
+        width: '100%'
     }
 
 });

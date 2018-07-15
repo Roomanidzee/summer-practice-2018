@@ -7,7 +7,7 @@ export default class APIHelper extends React.Component{
         super(props);
 
         this.state = {
-            apiURL: 'http://29c396a1.ngrok.io'
+            apiURL: 'http://ae85b904.ngrok.io'
         };
 
         if (!(authToken === '')) {

@@ -1,21 +1,26 @@
 import React from 'react';
 import {View, StyleSheet, Alert} from "react-native";
 import {FormInput, Button} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome'
 import APIHelper from "../components/APIHelper";
 
 export default class ArtistCreateScreen extends React.Component{
 
     static navigationOptions = {
-        title: 'Add an artist, if you want'
+        title: 'Добавление артиста',
+        headerTitleStyle: { alignSelf: 'center' },
+        headerRight: (<View />)
     };
 
     constructor(props){
 
         super(props);
 
+        const {navigation} = this.props;
+        const apiToken = navigation.getParam('token', '');
+
         this.state = {
             nickname: '',
+            token: apiToken,
             age: ''
         }
 
@@ -29,13 +34,8 @@ export default class ArtistCreateScreen extends React.Component{
 
                 <Button
 
-                    title= 'Go to page with all artists'
-                    onPress = {() => this.props.navigation.navigate('ShowArtists', {
-
-                        token: this.props.navigation.params.token
-
-                    })}
-                    raised
+                    title= 'Вернуться к артистам'
+                    onPress = {() => this.props.navigation.push('ShowArtists', {token: this.state.token})}
                     buttonStyle={stylesVariable.button_style}
                     backgroundColor={'blue'}
 
@@ -43,13 +43,7 @@ export default class ArtistCreateScreen extends React.Component{
 
                 <FormInput
 
-                    placeholder='Nickname'
-                    leftIcon={
-                        {
-                            type: 'font-awesome',
-                            name: 'user'
-                        }
-                    }
+                    placeholder='Псевдоним'
                     onChangeText = {(value) => this.setState({nickname: value})}
                     value = {this.state.nickname}
 
@@ -57,13 +51,7 @@ export default class ArtistCreateScreen extends React.Component{
 
                 <FormInput
 
-                    placeholder='Age'
-                    leftIcon={
-                        {
-                            type: 'font-awesome',
-                            name: 'user'
-                        }
-                    }
+                    placeholder='Возраст'
                     onChangeText = {(value) => this.setState({age: value})}
                     value = {this.state.age}
 
@@ -71,16 +59,8 @@ export default class ArtistCreateScreen extends React.Component{
 
                 <Button
 
-                    title='Add artist'
-                    icon={
-                        <Icon
-                            name='arrow-right'
-                            size={15}
-                            color='white'
-                        />
-                    }
-                    raised
-                    buttonStyle={stylesVariable.next_button}
+                    title='Добавить'
+                    buttonStyle={stylesVariable.button_style}
                     backgroundColor={'blue'}
                     onPress = {this.handleArtistCreate.bind(this)}
 
@@ -94,17 +74,15 @@ export default class ArtistCreateScreen extends React.Component{
 
     handleArtistCreate = () => {
 
-        const {stateProps} = props.navigation;
-        const token = stateProps.params.token;
-        const api = new APIHelper(this.props, token);
+        const api = new APIHelper(this.props, this.state.token);
 
         api.createArtist(this.state.nickname, this.state.age)
            .then(responseJSON => {
 
                 if(responseJSON.status === "success"){
-                    this.props.navigation.navigate('ShowArtists');
+                    this.props.navigation.push('ShowArtists', {token: this.state.token});
                 }else{
-                    this.props.navigation.navigate('AddArtist');
+                    this.props.navigation.push('AddArtist', {token: this.state.token});
                 }
 
            })
@@ -125,8 +103,7 @@ const stylesVariable = StyleSheet.create({
 
     button_style: {
         width: 200,
-        margin: 15,
-        marginTop:40
+        margin: 15
     }
 
 });

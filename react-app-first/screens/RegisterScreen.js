@@ -1,13 +1,14 @@
 import React from 'react';
 import {View, StyleSheet, Alert} from "react-native";
 import {FormInput, Button} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome'
 import APIHelper from "../components/APIHelper";
 
 export default class RegisterScreen extends React.Component {
 
     static navigationOptions = {
-        title: 'Registration page'
+        title: 'Регистрация',
+        headerTitleStyle: { alignSelf: 'center' },
+        headerRight: (<View />)
     };
 
     constructor(props) {
@@ -31,13 +32,7 @@ export default class RegisterScreen extends React.Component {
 
                 <FormInput
 
-                    placeholder='Username'
-                    leftIcon={
-                        {
-                            type: 'font-awesome',
-                            name: 'user'
-                        }
-                    }
+                    placeholder='Имя пользователя'
                     onChangeText = {(value) => this.setState({username: value})}
                     value = {this.state.username}
 
@@ -45,13 +40,7 @@ export default class RegisterScreen extends React.Component {
 
                 <FormInput
 
-                    placeholder='Email'
-                    leftIcon={
-                        {
-                            type: 'font-awesome',
-                            name: 'envelope'
-                        }
-                    }
+                    placeholder='Электронная почта'
                     onChangeText = {(value) => this.setState({email: value})}
                     value = {this.state.email}
 
@@ -59,14 +48,8 @@ export default class RegisterScreen extends React.Component {
 
                 <FormInput
 
-                    placeholder='Password'
+                    placeholder='Пароль'
                     secureTextEntry={true}
-                    leftIcon={
-                        {
-                            type: 'font-awesome',
-                            name: 'lock'
-                        }
-                    }
                     onChangeText = {(value) => this.setState({password: value})}
                     value = {this.state.password}
 
@@ -74,15 +57,7 @@ export default class RegisterScreen extends React.Component {
 
                 <Button
 
-                    title='Sign up'
-                    icon={
-                        <Icon
-                            name='arrow-right'
-                            size={15}
-                            color='white'
-                        />
-                    }
-                    raised
+                    title='Отправить'
                     buttonStyle={stylesVariable.button_style}
                     backgroundColor={'blue'}
                     onPress = {this.handleRegister.bind(this)}
@@ -124,8 +99,7 @@ const stylesVariable = StyleSheet.create({
     },
     button_style: {
         width: 200,
-        margin: 15,
-        marginTop:40
+        margin: 15
     }
 
 });
