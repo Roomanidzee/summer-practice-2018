@@ -1,4 +1,4 @@
-const app = require('./config/app_config');
+const app = require('./app_config');
 app.set('port', 8083);
 
 app.listen(app.get('port'), function () {

@@ -1,3 +1,5 @@
+const axios = require('axios');
+
 exports.indexPage = (req, resp) => resp.render('index_page', {title: 'Регистрация'});
 exports.resultPage = (req, resp) => resp.render('result_page', {title: 'Результат'});
 
