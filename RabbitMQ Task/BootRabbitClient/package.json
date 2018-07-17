@@ -1,0 +1,18 @@
+{
+  "name": "boot-rabbit-client",
+  "version": "0.1.0",
+  "description": "REST client to RabbitMQ apps",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andrey Romanov (steampart@gmail.com)",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "pug": "^2.0.3"
+  }
+}
